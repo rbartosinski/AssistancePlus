@@ -1,0 +1,26 @@
+{% extends 'check.html' %}
+
+{% block ins_coverage %}
+
+<table width="600">
+    <tr>
+        <td>ID polisy: {{ person.id }},
+            Pojazd ubezpieczony: nr rej.: {{ person.car_plate_number }},
+            marka i model: {{ person.car }}
+    </tr>
+    <tr>
+        <td>Ubezpieczający:
+        {{ person.person }}, Polisa aktywna:
+        {% if person.insurance_activ == True %}
+        Tak,
+        {% else %}
+        Nie,
+        {% endif %}
+        Rodzaj ubezpieczenia: {{ type_of_insurance }}</td>
+    </tr>
+<tr>
+    <td>{{ person.type_of_insurance.description }}</td>
+</tr>
+</table>
+
+{% endblock %}

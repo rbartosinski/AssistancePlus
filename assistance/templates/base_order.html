@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <menu type="toolbar" id="order_menu">
+        <menuitem><a href="/order_edit/{{ order.id }}">Zgłoszenie</a></menuitem>
+        <menuitem><a href="/task_list/{{ order.id }}">Zlecenia</a></menuitem>
+        <menuitem><a href="/doc_list/{{ order.id }}">Dokumenty</a></menuitem>
+    </menu>
+
+{% block order_details %}{% endblock %}
+
+{% endblock %}

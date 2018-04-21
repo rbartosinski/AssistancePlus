@@ -1,0 +1,20 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+
+    <p>
+    Utworzył: {{ doc.who_add }}
+    <br>Data wysyłki/zapisu: {{ doc.date_add }}
+    <br>Typ: {{ doc.type_of_doc }}
+    <br>ID Zgłoszenia: {{ order.id }}</p>
+    {% if doc.type_of_doc == 'email' %}
+        <td><a href="/media/{{ doc.name_of_PDF_document }}">Pokaż</a></td>
+    {% elif doc.type_of_doc == 'sms' %}
+        Wiadomość: {{ doc.sms }}
+    {% else %}
+        <p><a href="{{ doc.doc_in_file.url }}">Pokaż</a></p>
+    {% endif %}
+
+    <p><a href="/doc_list/{{ order.id }}">Wróć</a></p>
+
+{% endblock %}

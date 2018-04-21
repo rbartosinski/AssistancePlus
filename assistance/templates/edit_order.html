@@ -1,0 +1,51 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+
+    <p>ID zgłoszenia: {{ order.id }} Utworzył {{ order.who_add.username }} Data utworzenia {{ order.date }} {{ order.hour }}</p>
+
+    <p>{{ insured_about_note }}</p>
+
+    {% if order.person_insured is not None %}
+        <table width="600">
+            <tr>
+                <td>ID polisy: {{ order.person_insured.id }},
+                    Pojazd ubezpieczony: nr rej.: {{ order.person_insured.car_plate_number }},
+                    marka i model: {{ order.person_insured.car }}
+            </tr>
+            <tr>
+                <td>Ubezpieczający:
+                {{ order.person_insured.person }}, Polisa aktywna:
+                {% if order.person_insured.insurance_activ == True %}
+                Tak,
+                {% else %}
+                Nie,
+                {% endif %}
+                Rodzaj ubezpieczenia: {{ type_of_insurance }}</td>
+            </tr>
+            <tr>
+                <td>{{ order.person_insured.type_of_insurance.description }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p><a href="/order_check/{{ order.id }}">Pokrycie</a>
+        <a href="/check_insurance/{{ order.id }}">Wyszukiwanie ręczne</a></p>
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Poprzednie komentarze:</p>
+        {% for comment in comments %}
+            {{ comment.who_add_comment }}
+            {{ comment.date }}
+            {{ comment.hour }}
+            {{ comment.comment }}<br>
+        {% empty %}
+            brak wcześniejszych wpisów
+        {% endfor %}
+        {{ form_comment.as_p }}
+        <input type="submit" value="Zapisz">
+    </form>
+    {% block afterform %}{% endblock %}
+{% endblock %}

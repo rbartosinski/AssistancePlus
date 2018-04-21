@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p><h2>Wyszukaj polisę</h2></p>
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>Imię:<input name="person_first_name" placeholder="Jan"></td>
+            <td>Nazwisko:<input name="person_last_name" placeholder="Nowak"></td>
+        </tr>
+    </table>
+    <p><input type="submit" value="Szukaj"></p>
+    </form>
+    <table width="85%">
+
+{% if every_insured_selected is not None %}
+    <tr>
+        <th>Imię i nazwisko</th>
+        <th>Model i marka pojazdu</th>
+        <th>Nr rejestracyjny</th>
+        <th>Wariant ubezpieczenia</th>
+        <th>Polisa aktywna</th>
+    </tr>
+    {% for all_insured_selected in every_insured_selected %}
+        {% for insured_selected in all_insured_selected %}
+        <tr>
+            <td><a href="/policy_details/{{ order.id }}/{{ insured_selected.id }}">{{ insured_selected }} </a></td>
+            <td><a href="/policy_details/{{ order.id }}/{{ insured_selected.id }}">{{ insured_selected.car }}</a></td>
+            <td><a href="/policy_details/{{ order.id }}/{{ insured_selected.id }}">{{ insured_selected.car_plate_number }}</a></td>
+            <td><a href="/policy_details/{{ order.id }}/{{ insured_selected.id }}">
+                {% if insured_selected.type_of_insurance_id == 1 %}
+                {{ types_of_insurance.1 }}</a></td>
+                {% elif insured_selected.type_of_insurance_id == 2 %}
+                {{ types_of_insurance.2 }}</a></td>
+                {% elif insured_selected.type_of_insurance_id == 3 %}
+                {{ types_of_insurance.3 }}</a></td>
+                {% elif insured_selected.type_of_insurance_id == 4 %}
+                {{ types_of_insurance.4 }}</a></td>
+                {% endif %}
+            <td><a href="/policy_details/{{ order.id }}/{{ insured_selected.id }}">
+                {% if insured_selected.insurance_activ == True %}
+                Tak</a></td>
+                {% else %}
+                Nie</a></td>
+                {% endif %}
+        </tr>
+            {% endfor %}
+    {% empty %}
+        <tr>
+            <td>Brak zgłoszeń o podanych kryteriach</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+    </table>
+
+{% endblock %}

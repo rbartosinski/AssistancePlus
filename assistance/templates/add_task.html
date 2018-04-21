@@ -1,0 +1,11 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Dodaj zgłoszenie">
+    </form>
+    {% block afterform %}{% endblock %}
+{% endblock %}

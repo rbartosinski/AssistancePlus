@@ -1,0 +1,28 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+
+    <h3>Dokumenty:</h3>
+        <table width="85%">
+            <tr>
+                <th>Nazwa</th>
+                <th>Zapisano dn.</th>
+                <th>Utworzył</th>
+                <th>Szczegóły</th>
+            </tr>
+            {% for doc in docs %}
+                <tr>
+                    <td>{{ doc.type_of_doc }}</a></td>
+                    <td>{{ doc.date_add }}</a></td>
+                    <td>{{ doc.who_add }}</a></td>
+                    <td><a href="/doc_show/{{ order.id }}/{{ doc.id }}">Przejdź</a></td>
+            {% empty %}
+                <tr>
+                    <td>Brak dokumentów</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    <a href="/doc_add/{{ order.id }}">Dodaj dokument</a>
+
+{% endblock %}

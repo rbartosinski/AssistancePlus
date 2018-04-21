@@ -1,0 +1,54 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+    <h3>Zlecenia:</h3>
+        <table width="85%">
+            <tr>
+                <th>Typ zlecenia</th>
+                <th>Dodane</th>
+                <th>Usługodawca</th>
+                <th>Nr rej pojazdu</th>
+                <th>Utworzył</th>
+                <th>Status zlecenia</th>
+            </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">
+                        {% if task.type_of_task == 1 %}
+                        {{ types_of_tasks.1 }}</a></td>
+                        {% elif task.type_of_task == 2 %}
+                        {{ types_of_tasks.2 }}</a></td>
+                        {% elif task.type_of_task == 3 %}
+                        {{ types_of_tasks.3 }}</a></td>
+                        {% elif task.type_of_task == 4 %}
+                        {{ types_of_tasks.4 }}</a></td>
+                        {% elif task.type_of_task == 5 %}
+                        {{ types_of_tasks.5 }}</a></td>
+                        {% elif task.type_of_task == 6 %}
+                        {{ types_of_tasks.6 }}</a></td>
+                        {% elif task.type_of_task == 7 %}
+                        {{ types_of_tasks.7 }}</a></td>
+                        {% endif %}
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ task.date_add }}</a></td>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ task.provider }}</a></td>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ order.plate_number }}</a></td>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ order.who_add }}</a></td>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">
+                        {% if task.status_task == 1 %}
+                        {{ statuses_of_tasks.1 }}</a></td>
+                        {% elif task.status_task == 2 %}
+                        {{ statuses_of_tasks.2 }}</a></td>
+                        {% elif task.status_task == 3 %}
+                        {{ statuses_of_tasks.3 }}</a></td>
+                        {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>Brak zleceń</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    <p><a href="/task_add/{{ order.id }}">Dodaj nowe</a></p>
+
+{% endblock %}

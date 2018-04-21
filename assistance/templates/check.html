@@ -1,0 +1,9 @@
+{% extends 'base_order.html' %}
+
+{% block order_details %}
+<p><h2>Pokrycie ubezpieczeniowe dla nr rej.: {{ order.plate_number }}</h2></p>
+<form action="" method="POST">
+    {% csrf_token %}
+    {% block ins_coverage %}{% endblock %}
+    <p><input type="submit" value="Dodaj pokrycie"></p>
+{% endblock %}

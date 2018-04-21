@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>My Title</title>
+        <style type="text/css">
+            @page {
+                size: A4;
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <p>Warszawa, dn. {{ date }} r.
+    <br>Towarzystwo ubezpieczeniowe MojaNova
+    <br>z siedzibą w Warszawie</p>
+    <br>
+    <br>
+    <p>niniejszym gwarantuje opłacenie wynajmu samochodu zastępczego:<p>
+    <p>Wynajmujący: {{ task.provider }}
+    <br>Data i godzina rozpoczęcia wynajmu: {{ task.date_start }} {{ task.hour_start }}
+    <br>Data i godzina zakończenia wynajmu: {{ task.date_end }} {{ task.hour_end }}
+    <br>Klasa wypożyczonego samochodu: {{ car_class }}
+    <br>Udział własny: po stronie ubezpieczyciela
+    <br>Miejsce podstawienia pojazdu: {{ order.place_car_rented }}</p>
+    <p>Po zakończeniu wynajmu prosimy o przesłanie faktur e-mailem pod adres: faktury@mojanova.pl</p>
+    <br>
+    <br>
+    <p>Z poważaniem,
+        <br><a href="/save/{{ order.id }}/{{ task.id }}">MojaNova</a></p>
+    </body>
+</html>

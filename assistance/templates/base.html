@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        {% block styles %}{% endblock %}
+    </head>
+    <body>
+    <menu type="toolbar" id="ass_menu">
+        <menuitem><a href="/order_search/">Szukaj zgłoszenia</a></menuitem>
+        <menuitem><a href="/order_add/">Dodaj nowe zgłoszenie</a></menuitem>
+        <menuitem><a href="/help/">Pomoc</a></menuitem>
+        <menuitem><a href="/contact/">Kontakt</a></menuitem>
+    </menu>
+        {% block content %}{% endblock %}
+        <footer>
+            {% if user.is_authenticated %}
+                <p>Jesteś zalogowany jako {{ user.username }}. <a href="{% url 'logout' %}">Wyloguj</a></p>
+            {% else %}
+                <p><a href="{% url 'login' %}">Zaloguj</a></p>
+            {% endif %}
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    </body>
+</html>

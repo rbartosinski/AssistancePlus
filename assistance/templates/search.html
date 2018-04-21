@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p><h2>Wyszukiwarka</h2></p>
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        <tr>
+
+            <td>Nr rejestracyjny zgłoszony:<input name="asked_number_plate" placeholder="Podaj numer rejestracji"></td>
+            <td>Nr rejestracyjny ubezpieczonego:<input name="insured_number_plate" placeholder="Podaj numer rejestracji"></td>
+            <td>Nr zgłoszenia: <input name="task_id" placeholder="Podaj numer"></td>
+            <td>Ubezpieczony: <input name="policy_holder" placeholder="Podaj nazwisko"></td>
+        </tr>
+    </table>
+    <p><input type="submit" value="Szukaj"></p>
+    </form>
+    <table width="85%">
+
+{% if finded_orders is not None %}
+    <tr>
+        <th>ID Zgłoszenia</th>
+        <th>Data zgłoszenia</th>
+        <th>Zgłaszający</th>
+        <th>Ubezpieczony</th>
+        <th>Nr rej pojazdu zgłoszonego</th>
+        <th>Utworzył</th>
+    </tr>
+    {% for order in finded_orders %}
+        <tr>
+            <td><a href="/order_edit/{{ order.id }}">{{ order.id }}</a></td>
+            <td><a href="/order_edit/{{ order.id }}">{{ order.date }}</a></td>
+            <td><a href="/order_edit/{{ order.id }}">{{ order.notifier_first_name }} {{ order.notifier_last_name }}</a></td>
+            {% if order.person_insured is None %}
+            <td><a href="/order_edit/{{ order.id }}">Brak pokrycia ubezp.</a></td>
+            {% else %}
+            <td><a href="/order_edit/{{ order.id }}">{{ order.person_insured }}</a></td>
+            {% endif %}
+            <td><a href="/order_edit/{{ order.id }}">{{ order.plate_number }}</a></td>
+            <td><a href="/order_edit/{{ order.id }}">{{ order.who_add }}</a></td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td>Brak zgłoszeń o podanych kryteriach</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+    </table>
+
+{% endblock %}
