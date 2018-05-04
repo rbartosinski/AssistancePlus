@@ -2,17 +2,20 @@
 
 {% block content %}
 <p><h2>Wyszukaj polisę</h2></p>
-<form action="" method="POST">
+    {% load bootstrap %}
+<form action="" method="POST" role="form">
     {% csrf_token %}
-    <table>
+    <div class="form-group">
+    <table class="table">
         <tr>
             <td>Imię:<input name="person_first_name" placeholder="Jan"></td>
             <td>Nazwisko:<input name="person_last_name" placeholder="Nowak"></td>
         </tr>
     </table>
-    <p><input type="submit" value="Szukaj"></p>
-    </form>
-    <table width="85%">
+    <p><input type="submit" class="btn btn-primary" value="Szukaj"></p>
+    </div>
+</form>
+    <table width="85%" class="table">
 
 {% if every_insured_selected is not None %}
     <tr>

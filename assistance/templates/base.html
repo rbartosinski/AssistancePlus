@@ -4,26 +4,46 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         {% block styles %}{% endblock %}
     </head>
     <body>
-    <menu type="toolbar" id="ass_menu">
-        <menuitem><a href="/order_search/">Szukaj zgłoszenia</a></menuitem>
-        <menuitem><a href="/order_add/">Dodaj nowe zgłoszenie</a></menuitem>
-        <menuitem><a href="/help/">Pomoc</a></menuitem>
-        <menuitem><a href="/contact/">Kontakt</a></menuitem>
-    </menu>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background-color: #e3f2fd;">
+      <a class="navbar-brand" href="/order_search/">Assistance+</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/order_add/">Dodaj nowe zgłoszenie</a></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/order_search/">Szukaj zgłoszenia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/help/">Pomoc</a></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="/contact/">Kontakt</a></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+        <div class="jumbotron">
+            <div class="container">
         {% block content %}{% endblock %}
-        <footer>
-            {% if user.is_authenticated %}
-                <p>Jesteś zalogowany jako {{ user.username }}. <a href="{% url 'logout' %}">Wyloguj</a></p>
-            {% else %}
-                <p><a href="{% url 'login' %}">Zaloguj</a></p>
-            {% endif %}
-        </footer>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+            </div>
+        </div>
+            <footer>
+                {% if user.is_authenticated %}
+                    <p>Jesteś zalogowany jako {{ user.username }}. <a href="{% url 'logout' %}">Wyloguj</a></p>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Zaloguj</a></p>
+                {% endif %}
+            </footer>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
 </html>

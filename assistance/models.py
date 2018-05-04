@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from multiselectfield import MultiSelectField
 
-
 TYPE_OF_ORDER = (
     (1, "awaria"),
     (2, "wypadek"),
@@ -110,9 +109,10 @@ class NewOrder(models.Model):
     status_order = models.IntegerField(choices=STATUS_OF_ORDER, null=True)
 
 
-class NewTask (models.Model):
+class NewTask(models.Model):
     order_id = models.ForeignKey(NewOrder, on_delete=models.CASCADE)
     date_add = models.DateTimeField(auto_now_add=True)
+    who_add = models.ForeignKey(User, null=True)
     date_start = models.DateField(null=True)
     hour_start = models.TimeField(null=True)
     date_end = models.DateField(null=True)

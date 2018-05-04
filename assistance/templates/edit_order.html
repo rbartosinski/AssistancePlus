@@ -4,8 +4,15 @@
 
     <p>ID zgłoszenia: {{ order.id }} Utworzył {{ order.who_add.username }} Data utworzenia {{ order.date }} {{ order.hour }}</p>
 
-    <p>{{ insured_about_note }}</p>
+    {% if insured_about_note == 1 %}
+    <div class="alert alert-danger" role="alert">
+    Sprawdź pokrycie ubezpieczenia!
+    </div>
+    {% elif insured_about_note == 2 %}
+    <div class="alert alert-success" role="alert">
+    Pokrycie ubezpieczeniowe zweryfikowane.
 
+    {% endif %}
     {% if order.person_insured is not None %}
         <table width="600">
             <tr>
@@ -31,10 +38,15 @@
         <p><a href="/order_check/{{ order.id }}">Pokrycie</a>
         <a href="/check_insurance/{{ order.id }}">Wyszukiwanie ręczne</a></p>
     {% endif %}
+</div>
+    {% load bootstrap %}
 
-    <form action="" method="POST">
+
+
+    <form action="" method="POST" role="form">
         {% csrf_token %}
-        {{ form.as_p }}
+    <div class="form-group">
+        {{ form|bootstrap }}
         <p>Poprzednie komentarze:</p>
         {% for comment in comments %}
             {{ comment.who_add_comment }}
@@ -44,8 +56,9 @@
         {% empty %}
             brak wcześniejszych wpisów
         {% endfor %}
-        {{ form_comment.as_p }}
-        <input type="submit" value="Zapisz">
+        {{ form_comment|bootstrap }}
+        <input type="submit" class="btn btn-primary" value="Zapisz">
+    </div>
     </form>
     {% block afterform %}{% endblock %}
 {% endblock %}

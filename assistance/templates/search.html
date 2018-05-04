@@ -2,20 +2,24 @@
 
 {% block content %}
 <p><h2>Wyszukiwarka</h2></p>
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-        <tr>
 
+
+<form action="" method="POST" role="form">
+    {% csrf_token %}
+    <div class="form-group">
+    <table class="table">
+        <tr>
             <td>Nr rejestracyjny zgłoszony:<input name="asked_number_plate" placeholder="Podaj numer rejestracji"></td>
             <td>Nr rejestracyjny ubezpieczonego:<input name="insured_number_plate" placeholder="Podaj numer rejestracji"></td>
             <td>Nr zgłoszenia: <input name="task_id" placeholder="Podaj numer"></td>
             <td>Ubezpieczony: <input name="policy_holder" placeholder="Podaj nazwisko"></td>
         </tr>
     </table>
-    <p><input type="submit" value="Szukaj"></p>
-    </form>
-    <table width="85%">
+    <p><input type="submit" class="btn btn-primary" value="Szukaj"></p>
+</div>
+</form>
+
+    <table width="85%" class="table">
 
 {% if finded_orders is not None %}
     <tr>

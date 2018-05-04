@@ -3,6 +3,9 @@
 {% block ins_coverage %}
 
 <p>Nie znaleziono pokrycia</p>
+    {% if validate_failed is not None %}
+    {{ validate_failed }}
+    {% endif %}
 <p><a href="/order_edit/{{ order.id }}">Wróć</a></p>
 
 {% endblock %}

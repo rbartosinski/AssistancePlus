@@ -28,23 +28,24 @@ class CommentsForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea, label='Komentarz operatora')
 
 
-class NewTaskForm (forms.Form):
+class NewTaskForm(forms.Form):
     date_start = forms.DateField(label='Data rozpoczęcia', widget=SelectDateWidget)
     hour_start = forms.TimeField(
         widget=forms.TimeInput(format='%H:%M', attrs={'placeholder': '12:00'}),
-        label = 'Godzina rozpoczęcia'
+        label='Godzina rozpoczęcia'
     )
     date_end = forms.DateField(label='Data zakończenia', required=False, widget=SelectDateWidget)
     hour_end = forms.TimeField(
         widget=forms.TimeInput(format='%H:%M', attrs={'placeholder': '12:00'}),
-        label = 'Godzina zakończenia', required=False
+        label='Godzina zakończenia', required=False
     )
     type_of_task = forms.ChoiceField(choices=TYPE_OF_TASK, label='Rodzaj zlecenia')
     rented_car_class = forms.ChoiceField(choices=CAR_CLASSES, label='Klasa samochodu do wypożyczenia', required=False)
     provider = forms.CharField(widget=forms.Textarea, required=False, label='Dane usługodawcy')
     provider_phone_number = forms.IntegerField(label='Nr telefonu usługodawcy', required=False)
     provider_email = forms.EmailField(label='e-mail usługodawcy', required=False)
-    price = forms.CharField(widget=forms.NumberInput(attrs={'step': 0.01, 'max': 10000.0, 'min': 0.0}), label='Cena', required=False)
+    price = forms.CharField(widget=forms.NumberInput(attrs={'step': 0.01, 'max': 10000.0, 'min': 0.0}), label='Cena',
+                            required=False)
     description = forms.CharField(widget=forms.Textarea, label='Opis')
     status_task = forms.ChoiceField(choices=STATUS_OF_TASK, label='Status')
 
@@ -57,8 +58,5 @@ class DocAddForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(min_length=3, max_length=128, label='Użytkownik')
+    username = forms.CharField(min_length=3, max_length=128, label='Login')
     password = forms.CharField(widget=forms.PasswordInput, label='Hasło')
-
-
-

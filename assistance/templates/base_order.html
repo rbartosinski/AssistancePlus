@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <menu type="toolbar" id="order_menu">
-        <menuitem><a href="/order_edit/{{ order.id }}">Zgłoszenie</a></menuitem>
-        <menuitem><a href="/task_list/{{ order.id }}">Zlecenia</a></menuitem>
-        <menuitem><a href="/doc_list/{{ order.id }}">Dokumenty</a></menuitem>
-    </menu>
-
-{% block order_details %}{% endblock %}
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/order_edit/{{ order.id }}">Zgłoszenie <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/task_list/{{ order.id }}">Zlecenia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/doc_list/{{ order.id }}">Dokumenty</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <br>
+    {% block order_details %}{% endblock %}
 
 {% endblock %}

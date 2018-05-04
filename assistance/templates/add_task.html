@@ -2,10 +2,13 @@
 
 {% block order_details %}
 
-    <form action="" method="POST">
+{% load bootstrap %}
+    <form action="" method="POST" role="form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Dodaj zgłoszenie">
+        <div class="form-group">
+        {{ form|bootstrap }}
+        <input type="submit" class="btn btn-primary" value="Dodaj zgłoszenie">
+        </div>
     </form>
     {% block afterform %}{% endblock %}
 {% endblock %}

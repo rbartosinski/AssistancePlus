@@ -23,6 +23,7 @@ from assistance.views import OrderSearchView, OrderSimpleAddView, \
     TaskEditView, SaveTaskReceipt, DocListView, DocAddView, ShowDocView, HelpView, ContactView
 
 urlpatterns = [
+    url(r'^$', LoginView.as_view(), name='login_welcome'),
     url(r'^admin/', admin.site.urls),
     url(r'^order_search/$', OrderSearchView.as_view(), name='order_search'),
     url(r'^order_add/$', OrderSimpleAddView.as_view(), name='order_add'),
@@ -47,4 +48,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

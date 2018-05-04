@@ -6,11 +6,15 @@
 
     <p>{{ insured_about_note }}</p>
 
-    <form action="" method="POST">
+    {% load bootstrap %}
+    <form action="" method="POST" role="form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Zapisz">
+        <div class="form-group">
+        {{ form|bootstrap }}
+        <input type="submit" class="btn btn-primary" value="Zapisz">
+        </div>
     </form>
+    
     <p><a href="/generate_receipt/{{ order.id }}/{{ task.id }}">Generuj gwarancję płatności</a></p>
     {% block afterform %}{% endblock %}
 {% endblock %}

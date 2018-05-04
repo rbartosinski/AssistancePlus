@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect
 from django.views import View
 import pdfkit
 
-
 from assistance.forms import NewOrderSimpleForm, NewOrderFullForm, NewTaskForm, LoginForm, CommentsForm, \
     DocAddForm
 from assistance.models import Person, Insured, NewOrder, NewTask, TYPE_OF_INSURANCE, TYPE_OF_TASK, \
@@ -17,7 +16,6 @@ from twilio.rest import Client
 
 
 class OrderSearchView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_neworder'
     raise_exception = True
 
@@ -25,47 +23,46 @@ class OrderSearchView(PermissionRequiredMixin, View):
         return render(request, 'search.html')
 
     def post(self, request):
-            orders = NewOrder.objects.all()
-            person = Insured.objects.all()
-            asked_number_plate = request.POST.get('asked_number_plate')
-            if asked_number_plate != '':
-                orders = orders.filter(plate_number=asked_number_plate)
-            insured_number_plate = request.POST.get('insured_number_plate')
-            if insured_number_plate != '':
-                try:
-                    person = person.get(car_plate_number=insured_number_plate)
-                    data_to_find = person.id
-                except Insured.DoesNotExist:
-                    data_to_find = 0
-                orders = orders.filter(person_insured=data_to_find)
-            task_id = request.POST.get('task_id')
+        orders = NewOrder.objects.all()
+        person = Insured.objects.all()
+        asked_number_plate = request.POST.get('asked_number_plate')
+        if asked_number_plate != '':
+            orders = orders.filter(plate_number=asked_number_plate)
+        insured_number_plate = request.POST.get('insured_number_plate')
+        if insured_number_plate != '':
             try:
-                if task_id != '':
-                    orders = orders.filter(id=task_id)
-            except ValueError:
-                    orders = orders.filter(id=0)
-            policy_holder = request.POST.get('policy_holder')
-            if policy_holder != '':
-                try:
-                    person_holder = Person.objects.get(last_name=policy_holder)
-                    data_to_find = person_holder.id
-                except Person.DoesNotExist:
-                    data_to_find = 0
-                orders = orders.filter(person_insured=data_to_find)
-            if insured_number_plate == '' \
-                    and asked_number_plate == '' \
-                    and task_id == '' \
-                    and policy_holder == '':
-                orders = []
-            finded_orders = orders
-            ctx = {
-                'finded_orders': finded_orders
-            }
-            return render(request, 'search.html', ctx)
+                person = person.get(car_plate_number=insured_number_plate)
+                data_to_find = person.id
+            except Insured.DoesNotExist:
+                data_to_find = 0
+            orders = orders.filter(person_insured=data_to_find)
+        task_id = request.POST.get('task_id')
+        try:
+            if task_id != '':
+                orders = orders.filter(id=task_id)
+        except ValueError:
+            orders = orders.filter(id=0)
+        policy_holder = request.POST.get('policy_holder')
+        if policy_holder != '':
+            try:
+                person_holder = Person.objects.get(last_name=policy_holder)
+                data_to_find = person_holder.id
+            except Person.DoesNotExist:
+                data_to_find = 0
+            orders = orders.filter(person_insured=data_to_find)
+        if insured_number_plate == '' \
+                and asked_number_plate == '' \
+                and task_id == '' \
+                and policy_holder == '':
+            orders = []
+        finded_orders = orders
+        ctx = {
+            'finded_orders': finded_orders
+        }
+        return render(request, 'search.html', ctx)
 
 
 class OrderSimpleAddView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_neworder'
     raise_exception = True
 
@@ -82,6 +79,26 @@ class OrderSimpleAddView(PermissionRequiredMixin, View):
             user = User.objects.get(username=request.user)
             order.who_add = user
             order.save()
+
+            account_sid = "ACd7ddf6dc5a3ffda4badd44b6ecb72cc4"
+            auth_token = "361f509edea7905ab42072e6251b23d2"
+            client = Client(account_sid, auth_token)
+            client.api.account.messages.create(
+                to="48{}".format(order.phone_number),
+                from_="+48732483528",
+                body="Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance".format(
+                    order.id)
+            )
+            new_doc_create = Documents.objects.create(
+                who_add=request.user,
+                order_id=order,
+                type_of_doc='sms',
+                sms=
+                """from_="+48732483528",
+                to="48{}"
+                body=""Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance""".format(
+                    order.phone_number, order.id),
+            )
             return HttpResponseRedirect('/order_edit/{}'.format(order.id))
         ctx = {
             'form': form,
@@ -90,7 +107,6 @@ class OrderSimpleAddView(PermissionRequiredMixin, View):
 
 
 class OrderEditView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_neworder'
     raise_exception = True
 
@@ -104,9 +120,12 @@ class OrderEditView(PermissionRequiredMixin, View):
             person_data_to_ctx = 1
         types_of_insurance = dict(TYPE_OF_INSURANCE)
         if order.person_insured is None:
-            insured_about_note = 'Sprawdź pokrycie ubezpieczenia pojazdu!'
+            insured_about_note_danger = 1
+            insured_about_note = insured_about_note_danger
         else:
-            insured_about_note = 'Pokrycie ubezpieczenia zweryfikowane'
+            insured_about_note_allowed = 2
+            insured_about_note = insured_about_note_allowed
+        print(insured_about_note)
         form = NewOrderFullForm(initial={
             'phone_number': order.phone_number,
             'plate_number': order.plate_number,
@@ -125,9 +144,6 @@ class OrderEditView(PermissionRequiredMixin, View):
             'type_of_insurance': types_of_insurance[person_data_to_ctx],
         }
         return render(request, 'edit_order.html', ctx)
-
-    # 'comment': "{} {}".format(
-    #     str(datetime.datetime.now().strftime('%H:%M:%S, %d.%m.%Y')), order.comment
 
     def post(self, request, order_id):
         order = NewOrder.objects.get(id=order_id)
@@ -174,30 +190,6 @@ class OrderEditView(PermissionRequiredMixin, View):
                 'form': form,
                 'order': order,
             }
-
-            account_sid = "ACd7ddf6dc5a3ffda4badd44b6ecb72cc4"
-            auth_token = "361f509edea7905ab42072e6251b23d2"
-
-            client = Client(account_sid, auth_token)
-
-            client.api.account.messages.create(
-                to="48{}".format(order.phone_number),
-                from_="+48732483528",
-                body="Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance".format(
-                    order.id)
-            )
-
-            new_doc_create = Documents.objects.create(
-                who_add=request.user,
-                order_id=order,
-                type_of_doc='sms',
-                sms=
-                """from_="+48732483528",
-                to="48{}"
-                body=""Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance""".format(
-                    order.phone_number, order.id),
-            )
-
             return render(request, 'edit_order.html', ctx)
         ctx = {
             'comments': comments,
@@ -209,7 +201,6 @@ class OrderEditView(PermissionRequiredMixin, View):
 
 
 class OrderCheckView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_neworder'
     raise_exception = True
 
@@ -243,7 +234,6 @@ class OrderCheckView(PermissionRequiredMixin, View):
 
 
 class CheckInsuranceView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_neworder'
     raise_exception = True
 
@@ -255,40 +245,39 @@ class CheckInsuranceView(PermissionRequiredMixin, View):
         return render(request, 'check_manual.html', ctx)
 
     def post(self, request, order_id):
-            order = NewOrder.objects.get(id=order_id)
-            insured_all_data = Insured.objects.all()
-            person_first_name = request.POST.get('person_first_name')
-            person_last_name = request.POST.get('person_last_name')
-            types_of_insurance = dict(TYPE_OF_INSURANCE)
-            every_insured_selected = []
-            if person_first_name != '':
-                if person_last_name != '':
-                    persons = Person.objects.filter(first_name=person_first_name, last_name=person_last_name)
-                    for person in persons:
-                        insured_selected = insured_all_data.filter(person=person)
-                        every_insured_selected.append(insured_selected)
-                if person_last_name == '':
-                    persons = Person.objects.filter(first_name=person_first_name)
-                    for person in persons:
-                        insured_selected = insured_all_data.filter(person=person)
-                        every_insured_selected.append(insured_selected)
-            if person_first_name == '' and person_last_name != '':
-                persons = Person.objects.filter(last_name=person_last_name)
+        order = NewOrder.objects.get(id=order_id)
+        insured_all_data = Insured.objects.all()
+        person_first_name = request.POST.get('person_first_name')
+        person_last_name = request.POST.get('person_last_name')
+        types_of_insurance = dict(TYPE_OF_INSURANCE)
+        every_insured_selected = []
+        if person_first_name != '':
+            if person_last_name != '':
+                persons = Person.objects.filter(first_name=person_first_name, last_name=person_last_name)
                 for person in persons:
                     insured_selected = insured_all_data.filter(person=person)
                     every_insured_selected.append(insured_selected)
-            if person_first_name == '' and person_last_name == '':
-                every_insured_selected = []
-            ctx = {
-                'every_insured_selected': every_insured_selected,
-                'types_of_insurance': types_of_insurance,
-                'order': order,
-            }
-            return render(request, 'check_manual.html', ctx)
+            if person_last_name == '':
+                persons = Person.objects.filter(first_name=person_first_name)
+                for person in persons:
+                    insured_selected = insured_all_data.filter(person=person)
+                    every_insured_selected.append(insured_selected)
+        if person_first_name == '' and person_last_name != '':
+            persons = Person.objects.filter(last_name=person_last_name)
+            for person in persons:
+                insured_selected = insured_all_data.filter(person=person)
+                every_insured_selected.append(insured_selected)
+        if person_first_name == '' and person_last_name == '':
+            every_insured_selected = []
+        ctx = {
+            'every_insured_selected': every_insured_selected,
+            'types_of_insurance': types_of_insurance,
+            'order': order,
+        }
+        return render(request, 'check_manual.html', ctx)
 
 
 class PolicyDetailsView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -316,13 +305,18 @@ class PolicyDetailsView(PermissionRequiredMixin, View):
             return render(request, 'ins_not_exist.html', {
                 'order': order,
             })
-        order.person_insured = insured
-        order.save()
+        if insured.car_plate_number == order.plate_number:
+            order.person_insured = insured
+            order.save()
+        else:
+            return render(request, 'ins_not_exist.html', {
+                'order': order,
+                'validate_failed': 'Nr rejestracyjne się nie zgadzają',
+            })
         return HttpResponseRedirect('/order_edit/{}'.format(order.id))
 
 
 class TaskListView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -341,7 +335,6 @@ class TaskListView(PermissionRequiredMixin, View):
 
 
 class TaskAddView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -364,6 +357,7 @@ class TaskAddView(PermissionRequiredMixin, View):
             date_end = form.cleaned_data['date_end']
             hour_end = form.cleaned_data['hour_end']
             type_of_task = form.cleaned_data['type_of_task']
+            rented_car_class = form.cleaned_data['rented_car_class']
             provider = form.cleaned_data['provider']
             provider_phone_number = form.cleaned_data['provider_phone_number']
             provider_email = form.cleaned_data['provider_email']
@@ -375,9 +369,11 @@ class TaskAddView(PermissionRequiredMixin, View):
                 order_id=order,
                 date_start=date_start,
                 hour_start=hour_start,
+                who_add=request.user,
                 date_end=date_end,
                 hour_end=hour_end,
                 type_of_task=type_of_task,
+                rented_car_class=rented_car_class,
                 provider=provider,
                 provider_phone_number=provider_phone_number,
                 provider_email=provider_email,
@@ -385,8 +381,7 @@ class TaskAddView(PermissionRequiredMixin, View):
                 description=description,
                 status_task=status_task,
             )
-            if type_of_task == '1':
-
+            if type_of_task == '1' and provider_phone_number is not None:
                 account_sid = "ACd7ddf6dc5a3ffda4badd44b6ecb72cc4"
                 auth_token = "361f509edea7905ab42072e6251b23d2"
 
@@ -396,7 +391,7 @@ class TaskAddView(PermissionRequiredMixin, View):
                     to="48{}".format(provider_phone_number),
                     from_="+48732483528",
                     body="Zgłoszenie assistance id {} nr rej. {} {} tel. do klienta {}".format(
-                        order.id, order.plate_number, order.place_car_stay, order.phone_number )
+                        order.id, order.plate_number, order.place_car_stay, order.phone_number)
                 )
 
                 new_doc_create = Documents.objects.create(
@@ -422,7 +417,6 @@ class TaskAddView(PermissionRequiredMixin, View):
 
 
 class TaskEditView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -498,7 +492,6 @@ class TaskEditView(PermissionRequiredMixin, View):
 
 
 class GenerateTaskReceipt(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -513,13 +506,12 @@ class GenerateTaskReceipt(PermissionRequiredMixin, View):
             'date': date,
             'order': order,
             'task': task,
-            'car_class': car_classes[task.rented_car_class]
+            'car_class': car_classes[task.rented_car_class],
         }
         return render(request, 'generate.html', ctx)
 
 
 class SaveTaskReceipt(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -560,7 +552,6 @@ class SaveTaskReceipt(PermissionRequiredMixin, View):
 
 
 class DocListView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -575,7 +566,6 @@ class DocListView(PermissionRequiredMixin, View):
 
 
 class DocAddView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 
@@ -604,7 +594,6 @@ class DocAddView(PermissionRequiredMixin, View):
 
 
 class ShowDocView(PermissionRequiredMixin, View):
-
     permission_required = 'assistance.add_newtask'
     raise_exception = True
 

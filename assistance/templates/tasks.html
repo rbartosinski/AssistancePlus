@@ -2,7 +2,7 @@
 
 {% block order_details %}
     <h3>Zlecenia:</h3>
-        <table width="85%">
+        <table width="85%" class="table">
             <tr>
                 <th>Typ zlecenia</th>
                 <th>Dodane</th>
@@ -32,7 +32,7 @@
                     <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ task.date_add }}</a></td>
                     <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ task.provider }}</a></td>
                     <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ order.plate_number }}</a></td>
-                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ order.who_add }}</a></td>
+                    <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">{{ task.who_add }}</a></td>
                     <td><a href="/task_edit/{{ order.id }}/{{ task.id }}">
                         {% if task.status_task == 1 %}
                         {{ statuses_of_tasks.1 }}</a></td>
