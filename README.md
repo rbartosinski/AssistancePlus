@@ -1,4 +1,4 @@
-# Assistance+ App Testing
+# Assistance+ App
 
 ## Final Project at Coders Lab
 
