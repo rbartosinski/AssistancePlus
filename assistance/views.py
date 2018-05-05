@@ -13,6 +13,7 @@ from assistance.models import Person, Insured, NewOrder, NewTask, TYPE_OF_INSURA
     STATUS_OF_TASK, Comment, CAR_CLASSES, Documents
 import datetime
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 
 
 class OrderSearchView(PermissionRequiredMixin, View):
@@ -82,13 +83,15 @@ class OrderSimpleAddView(PermissionRequiredMixin, View):
 
             account_sid = "ACd7ddf6dc5a3ffda4badd44b6ecb72cc4"
             auth_token = "361f509edea7905ab42072e6251b23d2"
-            client = Client(account_sid, auth_token)
-            client.api.account.messages.create(
-                to="48{}".format(order.phone_number),
-                from_="+48732483528",
-                body="Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance".format(
-                    order.id)
-            )
+            try:
+                client.api.account.messages.create(
+                    to="48{}".format(order.phone_number),
+                    from_="+48732483528",
+                    body="Dzień dobry, zarejstrowaliśmy Twoje zgłoszenie pod nr {}. MojaNova Insurance".format(
+                        order.id)
+                )
+            except TwilioRestException:
+                pass
             new_doc_create = Documents.objects.create(
                 who_add=request.user,
                 order_id=order,
@@ -384,15 +387,18 @@ class TaskAddView(PermissionRequiredMixin, View):
             if type_of_task == '1' and provider_phone_number is not None:
                 account_sid = "ACd7ddf6dc5a3ffda4badd44b6ecb72cc4"
                 auth_token = "361f509edea7905ab42072e6251b23d2"
+                
+                try:
+                    client = Client(account_sid, auth_token)
 
-                client = Client(account_sid, auth_token)
-
-                client.api.account.messages.create(
-                    to="48{}".format(provider_phone_number),
-                    from_="+48732483528",
-                    body="Zgłoszenie assistance id {} nr rej. {} {} tel. do klienta {}".format(
-                        order.id, order.plate_number, order.place_car_stay, order.phone_number)
-                )
+                    client.api.account.messages.create(
+                        to="48{}".format(provider_phone_number),
+                        from_="+48732483528",
+                        body="Zgłoszenie assistance id {} nr rej. {} {} tel. do klienta {}".format(
+                            order.id, order.plate_number, order.place_car_stay, order.phone_number)
+                    )
+                except TwilioRestException:
+                    pass
 
                 new_doc_create = Documents.objects.create(
                     who_add=request.user,
