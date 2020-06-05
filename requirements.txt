@@ -3,7 +3,7 @@ bpython==0.17.1
 certifi==2018.1.18
 chardet==3.0.4
 curtsies==0.3.0
-Django==1.11
+Django==1.11.29
 django-datetime-widget==0.9.3
 django-easy-pdf==0.1.1
 django-extensions==2.0.0
