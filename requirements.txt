@@ -9,7 +9,7 @@ django-easy-pdf==0.1.1
 django-extensions==2.0.0
 django-multiselectfield==0.1.8
 django-wkhtmltopdf==3.1.0
-djangorestframework==3.7.7
+djangorestframework==3.11.2
 Faker==0.8.11
 greenlet==0.4.13
 html5lib==1.0.1
