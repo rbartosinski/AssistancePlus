@@ -25,7 +25,7 @@ Pygments==2.2.0
 PyJWT==1.6.1
 PyMySQL==0.8.0
 pyPdf==1.13
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 PySocks==1.6.8
 python-dateutil==2.6.1
 pytz==2018.3
