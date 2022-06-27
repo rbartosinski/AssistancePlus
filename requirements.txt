@@ -29,7 +29,7 @@ PyPDF2==1.26.0
 PySocks==1.6.8
 python-dateutil==2.6.1
 pytz==2018.3
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.18.4
 six==1.11.0
 text-unidecode==1.2
